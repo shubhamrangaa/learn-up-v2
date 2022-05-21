@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { collection, addDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, database } from "../firebaseConfig";
+import { AuthContext } from "../context/AuthContext";
 
 function Post() {
   const [title, setTitle] = useState("");
@@ -10,11 +11,7 @@ function Post() {
   const [link, setLink] = useState("");
   const [subject, setSubject] = useState("");
   const [standard, setStandard] = useState("");
-  const [user, setUser] = useState({});
-
-  onAuthStateChanged(auth, (currentUser) => {
-    setUser(currentUser);
-  });
+  const { user } = useContext(AuthContext);
 
   const colRef = collection(database, "resources");
   // console.log(user.currentUser, "user2");

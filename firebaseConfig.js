@@ -4,12 +4,12 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { collection, getFirestore, getDoc } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCjEura62egk3GKR7YEcWFGDPwZCwy9FCE",
-  authDomain: "learnup-cac21.firebaseapp.com",
-  projectId: "learnup-cac21",
-  storageBucket: "learnup-cac21.appspot.com",
-  messagingSenderId: "945396279584",
-  appId: "1:945396279584:web:eae811dee015ed3af84f45",
+  apiKey: "AIzaSyBfli3_3x_p4GtS2GwIUy-NsbIQNskg7gg",
+  authDomain: "learnupv2.firebaseapp.com",
+  projectId: "learnupv2",
+  storageBucket: "learnupv2.appspot.com",
+  messagingSenderId: "500682409799",
+  appId: "1:500682409799:web:bb3dd00cc1fd7a34132e62",
 };
 
 export const app = initializeApp(firebaseConfig);
