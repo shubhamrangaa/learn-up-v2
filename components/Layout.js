@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "./context/AuthContext";
-import Navbar from "./Navbar";
+import { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import Navbar from './Navbar';
 
 const Layout = ({ children }) => {
   const { user } = useContext(AuthContext);
