@@ -1,32 +1,24 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import {
-  getDocs,
-  getFirestore,
-  collection,
-  query,
-  where,
-} from "firebase/firestore";
+import { getFilteredResources } from "../../services/resources";
+
+const validSubjects = ["class10", "class12", "cse", "it", "cce"];
 
 function Subject() {
   const router = useRouter();
-  const subject = router.query.subject;
+  const { subject } = router.query;
 
-  const validSubjects = ["class10", "class12", "cse", "it", "cce"];
-
-  const db = getFirestore();
   let [resources, setResources] = useState([]);
-  const colRef = collection(db, "resources");
-  const q = query(colRef, where("standard", "==", `${subject}`));
-  getDocs(q)
-    .then((snapshot) => {
-      let tempResource = [];
-      snapshot.docs.forEach((doc) => {
-        tempResource.push({ ...doc.data(), id: doc.id });
-      });
-      setResources(tempResource);
-    })
-    .catch((err) => console.log(err.message));
+
+  useEffect(() => {
+    fetchSubject();
+  }, [subject]);
+
+  const fetchSubject = async () => {
+    const filterOptions = { field: "standard", value: subject || "" };
+    const data = await getFilteredResources({ filterOptions });
+    setResources(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
 
   return (
     <>
@@ -36,7 +28,7 @@ function Subject() {
           {resources.length > 0 ? (
             resources.map(function (resource, i) {
               return (
-                <>
+                <div key={i}>
                   <div className="card">
                     <h4 className="title">{resource.title}</h4>
                     <p className="description">{resource.description}</p>
@@ -49,7 +41,7 @@ function Subject() {
                       <p className="subject">Subject: {resource.subject}</p>
                     </div>
                   </div>
-                </>
+                </div>
               );
             })
           ) : (

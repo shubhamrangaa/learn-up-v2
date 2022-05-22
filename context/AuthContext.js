@@ -22,16 +22,16 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     return onIdTokenChanged(auth, async (user) => {
-      console.log("token changed");
+      // console.log("token changed");
       if (!user) {
         dispatch({ type: "DELETE_USER" });
         nookies.set(undefined, "token", "", { path: "/" });
-        console.log("user deleted");
+        // console.log("user deleted");
       } else {
-        console.log("updating user");
+        // console.log("updating user");
         const token = await user.getIdToken();
         dispatch({ type: "UPDATE_USER", payload: user });
-        console.log("user updated");
+        // console.log("user updated");
         nookies.set(undefined, "token", token, { path: "/" });
       }
     });

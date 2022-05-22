@@ -1,15 +1,23 @@
-import { getDocs, collection } from "firebase/firestore";
-import { useState, useEffect } from "react";
-import { auth, database, googleProvider } from "../firebaseConfig";
+import { useState, useEffect, useContext } from "react";
 
-import { onAuthStateChanged, signOut, signInWithPopup } from "firebase/auth";
-import { jsonEval } from "@firebase/util";
+import { auth, googleProvider } from "../firebaseConfig";
+import { signOut, signInWithPopup } from "firebase/auth";
 
-// import "./home.css";
+import { AuthContext } from "../context/AuthContext";
+import { getResources } from "../services/resources";
 
 function Home() {
   let [resources, setResources] = useState([]);
-  const [user, setUser] = useState({});
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    fetchResources();
+  }, []);
+
+  const fetchResources = async () => {
+    const data = await getResources();
+    setResources(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
 
   const logout = async (e) => {
     e.preventDefault();
@@ -18,24 +26,8 @@ function Home() {
 
   const signInWithGoogle = async (e) => {
     e.preventDefault();
-    const userDetails = await signInWithPopup(auth, googleProvider);
-    console.log(userDetails);
+    await signInWithPopup(auth, googleProvider);
   };
-
-  onAuthStateChanged(auth, (currentUser) => {
-    setUser(currentUser);
-  });
-
-  const colRef = collection(database, "resources");
-  getDocs(colRef)
-    .then((snapshot) => {
-      let tempResource = [];
-      snapshot.docs.forEach((doc) => {
-        tempResource.push({ ...doc.data(), id: doc.id });
-      });
-      setResources(tempResource);
-    })
-    .catch((err) => console.log(err.message));
 
   return (
     <>

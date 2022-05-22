@@ -1,5 +1,5 @@
 const AppReducer = (state, action) => {
-  console.log("in reducer");
+  // console.log("in reducer");
 
   switch (action.type) {
     case "UPDATE_USER":

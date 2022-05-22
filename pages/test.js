@@ -3,6 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 
 function Test() {
   const { user } = useContext(AuthContext);
+  console.log(user);
   return <div>hello {user.email} </div>;
 }
 
