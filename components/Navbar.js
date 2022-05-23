@@ -1,7 +1,25 @@
 import Link from 'next/link';
 import styles from './Navbar.module.css';
 
+import { auth, googleProvider } from '../firebaseConfig';
+import { signOut, signInWithPopup } from 'firebase/auth';
+import { useRouter } from 'next/router';
+
 const Navbar = ({ isLoggedIn }) => {
+  const router = useRouter();
+
+  const logout = async (e) => {
+    e.preventDefault();
+    await signOut(auth);
+    router.push('/home');
+  };
+
+  const signInWithGoogle = async (e) => {
+    e.preventDefault();
+    await signInWithPopup(auth, googleProvider);
+    router.push('/onboard-user');
+  };
+
   return (
     <>
       <div className={styles.navbar}>
@@ -25,13 +43,13 @@ const Navbar = ({ isLoggedIn }) => {
           <Link href='/featured'>
             <a>Featured</a>
           </Link>
-          {isLoggedIn ? (
-            <Link href='/login'>
-              <a>Logout</a>
-            </Link>
-          ) : (
-            <a>Login</a>
-          )}
+          <Link href='/login'>
+            {isLoggedIn ? (
+              <a onClick={logout}>Logout</a>
+            ) : (
+              <a onClick={signInWithGoogle}>Login</a>
+            )}
+          </Link>
         </div>
       </div>
     </>

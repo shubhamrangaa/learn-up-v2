@@ -2,7 +2,19 @@ import React from 'react';
 import ResourceCard from './ResourceCard';
 import styles from './ResourceList.module.css';
 
-function ResourceList({ heading, resources }) {
+function ResourceList({ heading, resources, filter, getResources }) {
+  let topics = [
+    'English',
+    'OS',
+    'RDBMS',
+    'CN',
+    'DSML',
+    'ISS',
+    'DSA',
+    'OOPS',
+    'DAA',
+    'WEB',
+  ];
   return (
     <div className={styles.main}>
       <div className={styles.feed}>
@@ -17,6 +29,21 @@ function ResourceList({ heading, resources }) {
       </div>
       <div className={styles.filters}>
         <h3>Browse Topics</h3>
+        <div className={styles.topicContainer}>
+          <p className={styles.topic} onClick={() => getResources()}>
+            All
+          </p>
+          {topics.map((topic, i) => {
+            return (
+              <p
+                className={styles.topic}
+                onClick={() => filter('subject', topic)}
+              >
+                {topic}
+              </p>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

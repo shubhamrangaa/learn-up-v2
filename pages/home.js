@@ -1,13 +1,11 @@
 import { useState, useEffect, useContext } from 'react';
 
-import { auth, googleProvider } from '../firebaseConfig';
-import { signOut, signInWithPopup } from 'firebase/auth';
-
 import { AuthContext } from '../context/AuthContext';
-import { getResources } from '../services/resources';
+import { getResources, getFilteredResources } from '../services/resources';
 
 import Layout from '../components/Layout';
 import ResourceList from '../components/ResourceList';
+import { async } from '@firebase/util';
 
 function Home() {
   let [resources, setResources] = useState([]);
@@ -22,21 +20,19 @@ function Home() {
     setResources(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
 
-  const logout = async (e) => {
-    e.preventDefault();
-    await signOut(auth);
-  };
-
-  const signInWithGoogle = async (e) => {
-    e.preventDefault();
-    await signInWithPopup(auth, googleProvider);
+  const filterTopics = async (subject, topic) => {
+    const data = await getFilteredResources(subject, topic);
+    setResources(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
 
   return (
     <>
-      {/* <button onClick={logout}>Logout</button>
-      <button onClick={signInWithGoogle}>Login</button> */}
-      <ResourceList heading="Today's Feed" resources={resources} />
+      <ResourceList
+        heading="Today's Feed"
+        resources={resources}
+        filter={filterTopics}
+        getResources={fetchResources}
+      />
     </>
   );
 }

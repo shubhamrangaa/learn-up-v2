@@ -1,0 +1,25 @@
+.parent {
+  padding: 0 80px;
+}
+
+.categoryContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.category {
+  border: 2px solid rgba(26, 26, 26, 0.431);
+  height: 200px;
+  width: 200px;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.category:hover {
+  background-color: #000;
+  color: #fff;
+}
