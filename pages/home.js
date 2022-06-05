@@ -1,11 +1,9 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from "react";
 
-import { AuthContext } from '../context/AuthContext';
-import { getResources, getFilteredResources } from '../services/resources';
+import { AuthContext } from "../context/AuthContext";
+import { getResources, getFilteredResources } from "../services/resources";
 
-import Layout from '../components/Layout';
-import ResourceList from '../components/ResourceList';
-import { async } from '@firebase/util';
+import ResourceList from "../components/ResourceList";
 
 function Home() {
   let [resources, setResources] = useState([]);

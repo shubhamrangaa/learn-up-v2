@@ -1,19 +1,19 @@
-import React from 'react';
-import ResourceCard from './ResourceCard';
-import styles from './ResourceList.module.css';
+import React from "react";
+import ResourceCard from "./ResourceCard";
+import styles from "./ResourceList.module.css";
 
 function ResourceList({ heading, resources, filter, getResources }) {
   let topics = [
-    'English',
-    'OS',
-    'RDBMS',
-    'CN',
-    'DSML',
-    'ISS',
-    'DSA',
-    'OOPS',
-    'DAA',
-    'WEB',
+    "English",
+    "OS",
+    "RDBMS",
+    "CN",
+    "DSML",
+    "ISS",
+    "DSA",
+    "OOPS",
+    "DAA",
+    "WEB",
   ];
   return (
     <div className={styles.main}>
@@ -36,8 +36,9 @@ function ResourceList({ heading, resources, filter, getResources }) {
           {topics.map((topic, i) => {
             return (
               <p
+                key={i}
                 className={styles.topic}
-                onClick={() => filter('subject', topic)}
+                onClick={() => filter("subject", topic)}
               >
                 {topic}
               </p>

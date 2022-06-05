@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import style from './OnboardForm.module.css';
+import React, { useState } from "react";
+import style from "./OnboardForm.module.css";
 
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
-import { database } from '../firebaseConfig';
+import { database } from "../firebaseConfig";
 import {
   collection,
   getDocs,
@@ -11,24 +11,24 @@ import {
   where,
   updateDoc,
   doc,
-} from 'firebase/firestore';
-
-const colRef = collection(database, 'users');
+} from "firebase/firestore";
 
 function OnboardForm(user) {
-  const [bio, setBio] = useState('');
-  const [location, setLocation] = useState('');
-  const [uni, setUni] = useState('');
-  const [DOB, setDOB] = useState('');
+  const [bio, setBio] = useState("");
+  const [location, setLocation] = useState("");
+  const [uni, setUni] = useState("");
+  const [DOB, setDOB] = useState("");
 
-  const colRef = collection(database, 'users');
+  const router = useRouter();
+
+  const colRef = collection(database, "users");
 
   const addInfo = async (e) => {
     e.preventDefault();
-    if (bio === '' || location === '' || uni === '' || DOB === '') {
-      return alert('Please enter all information');
+    if (bio === "" || location === "" || uni === "" || DOB === "") {
+      return alert("Please enter all information");
     }
-    const q = await query(colRef, where('email', '==', user.user.email));
+    const q = await query(colRef, where("email", "==", user.user.email));
     const data = await getDocs(q);
     const existingUser = data.docs.map((doc) => ({
       ...doc.data(),
@@ -43,22 +43,22 @@ function OnboardForm(user) {
       name: user.user.displayName,
       image: user.user.photoURL,
     });
-    const add = document.querySelector('#add');
+    const add = document.querySelector("#add");
     add.reset();
-    router.push('/home');
+    router.push("/home");
   };
 
   return (
     <div className={style.additionalInfo}>
       <h4>Please Enter Your Details</h4>
 
-      <form id='add'>
+      <form id="add">
         <label>Bio</label>
 
         <input
-          type='textarea'
-          label='Bio'
-          placeholder='Enter Bio'
+          type="textarea"
+          label="Bio"
+          placeholder="Enter Bio"
           required
           onChange={(event) => {
             setBio(event.target.value);
@@ -67,8 +67,8 @@ function OnboardForm(user) {
         <label>Location</label>
 
         <input
-          label='Location'
-          placeholder='Enter your Location'
+          label="Location"
+          placeholder="Enter your Location"
           required
           onChange={(event) => {
             setLocation(event.target.value);
@@ -77,8 +77,8 @@ function OnboardForm(user) {
         <label>University</label>
 
         <input
-          label='University'
-          placeholder='Enter University'
+          label="University"
+          placeholder="Enter University"
           required
           onChange={(event) => {
             setUni(event.target.value);
@@ -86,8 +86,8 @@ function OnboardForm(user) {
         />
         <label>DOB</label>
         <input
-          label='DOB'
-          placeholder='Enter DOB'
+          label="DOB"
+          placeholder="Enter DOB"
           required
           onChange={(event) => {
             setDOB(event.target.value);
