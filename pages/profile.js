@@ -3,43 +3,83 @@ import { AuthContext } from "../context/AuthContext";
 import { getFilteredResources } from "../services/resources";
 
 import { database } from "../firebaseConfig";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import UserInfo from "../components/UserInfo";
 import ResourceList from "../components/ResourceList";
 
-const colRef = collection(database, "users");
+const userColRef = collection(database, "users");
+const resourceColRef = collection(database, "resources");
 
 const Profile = () => {
   let [userUploads, setUserUploads] = useState([]);
   let [existingUser, setExistingUser] = useState([]);
+  let [userBookmarks, setUserBookmarks] = useState([]);
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    fetchUserUploads();
-    fetchUser();
+    if (user.email) {
+      fetchUser();
+      fetchUserUploads();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const fetchUser = async () => {
-    const q = await query(colRef, where("email", "==", user.email));
+    // getting user object
+    const q = query(userColRef, where("email", "==", user.email));
     const data = await getDocs(q);
     const tempUser = data.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
     }));
-    setExistingUser(tempUser);
+    setExistingUser(tempUser[0]);
+
+    const resourceIds = tempUser[0].bookmarks;
+    if (resourceIds?.length > 0) {
+      const newBookmarks = [];
+      for (let i = 0; i < resourceIds.length; i++) {
+        // repition problem
+        const resourceDocRef = doc(resourceColRef, resourceIds[i]);
+        const docSnap = await getDoc(resourceDocRef);
+        if (docSnap.data()) {
+          newBookmarks = [...newBookmarks, docSnap.data()];
+        }
+      }
+      setUserBookmarks(newBookmarks);
+    }
   };
 
   const fetchUserUploads = async () => {
-    const data = await getFilteredResources("email", user.email);
-    setUserUploads(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    if (user.email) {
+      const data = await getFilteredResources("email", user.email);
+      const tempResources = data.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setUserUploads(tempResources);
+    }
   };
   return (
     <div>
       <UserInfo existingUser={existingUser} />
       <ResourceList heading="My Posts" resources={userUploads} />
-      {/* <h3>Welcome back brother, Your posts </h3>
-      <div> {JSON.stringify(userUploads)}</div> */}
+      {/* {userUploads ? (
+        <ResourceList heading="My Posts" resources={userUploads} />
+      ) : (
+        ""
+      )} */}
+      {userBookmarks ? (
+        <ResourceList heading="My Bookmarks" resources={userBookmarks} />
+      ) : (
+        ""
+      )}
     </div>
   );
 };

@@ -40,6 +40,9 @@ function OnboardForm(user) {
       uni,
       DOB,
       location,
+      bookmarks: [],
+      downvotes: [],
+      upvotes: [],
       name: user.user.displayName,
       image: user.user.photoURL,
     });

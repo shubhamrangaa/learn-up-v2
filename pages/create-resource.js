@@ -1,43 +1,84 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from "react";
 
-import { collection, addDoc } from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth, database } from '../firebaseConfig';
-import { AuthContext } from '../context/AuthContext';
+import { collection, addDoc } from "firebase/firestore";
+import { database } from "../firebaseConfig";
+import { AuthContext } from "../context/AuthContext";
+
+const categories = [
+  {
+    name: "grade_10",
+    displayName: "10th Grade",
+    topics: ["Mathematics", "English", "Hindi"],
+  },
+  {
+    name: "grade_12",
+    displayName: "12th Grade",
+    topics: ["Mathematics", "English", "Hindi"],
+  },
+  {
+    name: "comp_sci",
+    displayName: "Computer Science",
+    topics: ["OS", "RDBMS", "Networks"],
+  },
+  {
+    name: "marketing",
+    displayName: "Marketing",
+    topics: ["Digital", "Sale", "Growth"],
+  },
+];
 
 function Post() {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [link, setLink] = useState('');
-  const [subject, setSubject] = useState('');
-  const [standard, setStandard] = useState('');
   const { user } = useContext(AuthContext);
+  const [formState, setFormState] = useState({});
+  const [topics, setTopics] = useState([]);
 
-  const colRef = collection(database, 'resources');
-  // console.log(user.currentUser, "user2");
-  console.log(user);
+  const colRef = collection(database, "resources");
+
+  const handleChange = (event) => {
+    setFormState((previousState) => ({
+      ...previousState,
+      [event.target.name]: event.target.value,
+    }));
+    if (
+      event.target.name === "category" &&
+      event.target.value !== formState.category
+    ) {
+      filterTopics(event.target.value);
+    }
+  };
+
+  const filterTopics = (newCategory) => {
+    const newCategoryData = categories.filter(
+      (category) => category.name === newCategory
+    );
+    setTopics(newCategoryData[0].topics);
+    setFormState((previousState) => ({
+      ...previousState,
+      displayCategory: newCategoryData[0].displayName,
+    }));
+  };
 
   const addResource = async (e) => {
     e.preventDefault();
     if (
-      title === '' ||
-      description === '' ||
-      link === '' ||
-      subject === '' ||
-      standard === ''
+      formState.title === "" ||
+      formState.description === "" ||
+      formState.link === "" ||
+      formState.category === "" ||
+      formState.topic === ""
     ) {
-      return alert('Please enter all information');
+      return alert("Please enter all information");
     }
     await addDoc(colRef, {
-      title,
-      description,
-      link,
-      subject,
-      standard,
+      ...formState,
+      upvote: 0,
+      downvote: 0,
+      username: user.displayName,
       email: user.email,
       date: new Date(),
     });
-    const add = document.querySelector('.Add');
+    alert("Resource added successfully");
+    const add = document.querySelector(".Add");
     add.reset();
   };
 
@@ -45,79 +86,58 @@ function Post() {
     return (
       <div>
         <div>
-          <div align='center'>
+          <div align="center">
             <h2>Add Resource</h2>
           </div>
-          <form className='Add'>
+          <form className="Add">
             <label>Title</label>
-
             <input
-              label='Title'
-              placeholder='Enter Title'
+              name="title"
+              placeholder="Enter Title"
               required
-              onChange={(event) => {
-                setTitle(event.target.value);
-              }}
+              onChange={handleChange}
             />
+
             <label>Description</label>
-
             <input
-              label='Description'
-              placeholder='Enter Description'
+              name="description"
+              placeholder="Enter Description"
               required
-              onChange={(event) => {
-                setDescription(event.target.value);
-              }}
+              onChange={handleChange}
             />
+
             <label>Link</label>
-
             <input
-              label='Resource'
-              placeholder='Enter resource link'
+              name="link"
+              label="Resource"
+              placeholder="Enter resource link"
               required
-              onChange={(event) => {
-                setLink(event.target.value);
-              }}
+              onChange={handleChange}
             />
-            {/* <FormControl required fullWidth> */}
-            <label>Standard</label>
-            <select
-              value={standard}
-              label='Standard'
-              onChange={(event) => {
-                setStandard(event.target.value);
-              }}
-            >
-              <option value={'class10'}>ClassX</option>
-              <option value={'class12'}>ClassXII</option>
-              <option value={'cse'}>CSE</option>
-              <option value={'it'}>IT</option>
-              <option value={'cce'}>CCE</option>
+
+            <label>Category</label>
+            <select label="Category" name="category" onChange={handleChange}>
+              {categories.map((category, i) => {
+                return (
+                  <option key={i} value={category.name}>
+                    {category.displayName}
+                  </option>
+                );
+              })}
             </select>
-            {/* </FormControl> */}
-            {/* <FormControl required fullWidth> */}
-            <label>Subject</label>
-            <select
-              value={subject}
-              label='Subject'
-              onChange={(event) => {
-                setSubject(event.target.value);
-              }}
-            >
-              <option value={'Science'}>Science</option>
-              <option value={'English'}>English</option>
-              <option value={'OS'}>OS</option>
-              <option value={'RDBMS'}>RDBMS</option>
-              <option value={'CN'}>CN</option>
-              <option value={'DSML'}>DSML</option>
-              <option value={'ISS'}>ISS</option>
-              <option value={'DSA'}>DSA</option>
-              <option value={'OOPS'}>OOPS</option>
-              <option value={'DAA'}>DAA</option>
-              <option value={'WEB'}>WEB</option>
+
+            <label>Topic</label>
+            <select name="topic" label="topic" onChange={handleChange}>
+              {topics?.map((topic, i) => {
+                return (
+                  <option key={i} value={topic}>
+                    {topic}
+                  </option>
+                );
+              })}
             </select>
-            {/* </FormControl> */}
-            <button color='primary' variant='contained' onClick={addResource}>
+
+            <button color="primary" variant="contained" onClick={addResource}>
               Add Resource
             </button>
           </form>

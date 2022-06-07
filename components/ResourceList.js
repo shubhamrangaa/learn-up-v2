@@ -19,7 +19,7 @@ function ResourceList({ heading, resources, filter, getResources }) {
     <div className={styles.main}>
       <div className={styles.feed}>
         <h1>{heading}</h1>
-        {resources.length > 0 ? (
+        {resources?.length > 0 ? (
           resources.map((resource, i) => {
             return <ResourceCard key={i} resource={resource} />;
           })
