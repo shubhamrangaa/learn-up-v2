@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.form {
+  box-shadow: 20px 15px 20px #8888880f;
+  border-radius: 20px;
+  padding: 30px;
+}
+.input {
+  width: 500px;
+  height: 40px;
+}
+.btn {
+  padding: 10px 25px;
+  background-color: black;
+  color: #fff;
+  cursor: pointer;
+}

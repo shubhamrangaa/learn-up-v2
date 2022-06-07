@@ -1,6 +1,6 @@
 import style from './index.module.css';
 
-const validSubjects = ['class10', 'class12', 'cse', 'it', 'cce'];
+const validSubjects = ['marketing', 'grade_12', 'grade_10', 'comp_sci'];
 
 const Subjects = () => {
   return (

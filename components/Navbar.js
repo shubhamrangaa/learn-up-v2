@@ -40,9 +40,21 @@ const Navbar = ({ isLoggedIn }) => {
               <a>Profile</a>
             </Link>
           ) : null}
-          <Link href='/featured'>
-            <a>Featured</a>
-          </Link>
+          {isLoggedIn ? (
+            <Link href='/requests/create'>
+              <a>Request</a>
+            </Link>
+          ) : null}
+          {isLoggedIn ? (
+            <Link href='/requests/open'>
+              <a>Resolve</a>
+            </Link>
+          ) : null}
+          {isLoggedIn ? (
+            <Link href='/create-resource'>
+              <a>Post</a>
+            </Link>
+          ) : null}
           <Link href='/login'>
             {isLoggedIn ? (
               <a onClick={logout}>Logout</a>

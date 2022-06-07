@@ -1,20 +1,18 @@
-import React from "react";
-import ResourceCard from "./ResourceCard";
-import styles from "./ResourceList.module.css";
+import React, { useState } from 'react';
+import ResourceCard from './ResourceCard';
+import styles from './ResourceList.module.css';
 
-function ResourceList({ heading, resources, filter, getResources }) {
-  let topics = [
-    "English",
-    "OS",
-    "RDBMS",
-    "CN",
-    "DSML",
-    "ISS",
-    "DSA",
-    "OOPS",
-    "DAA",
-    "WEB",
-  ];
+function ResourceList({ heading, resources, filter, getResources, subject }) {
+  let topics;
+  let filterType;
+  if (subject == undefined) {
+    topics = ['12th Grade', 'Marketing', 'Computer Science', '10th Grade'];
+    filterType = 'displayCategory';
+  } else {
+    topics = subject;
+    filterType = 'topic';
+  }
+  console.log(topics);
   return (
     <div className={styles.main}>
       <div className={styles.feed}>
@@ -24,7 +22,7 @@ function ResourceList({ heading, resources, filter, getResources }) {
             return <ResourceCard key={i} resource={resource} />;
           })
         ) : (
-          <h5>Please wait...</h5>
+          <h5>We do not have anything to show yet</h5>
         )}
       </div>
       <div className={styles.filters}>
@@ -38,7 +36,7 @@ function ResourceList({ heading, resources, filter, getResources }) {
               <p
                 key={i}
                 className={styles.topic}
-                onClick={() => filter("subject", topic)}
+                onClick={() => filter(filterType, topic)}
               >
                 {topic}
               </p>

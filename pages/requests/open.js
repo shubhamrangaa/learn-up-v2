@@ -6,13 +6,13 @@ import {
   updateDoc,
   doc,
   getDoc,
-} from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { database } from "../../firebaseConfig";
-import style from "../../components/ResourceCard.module.css";
-import Image from "next/image";
+} from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import { database } from '../../firebaseConfig';
+import style from '../../components/ResourceCard.module.css';
+import Image from 'next/image';
 
-const requestColRef = collection(database, "requests");
+const requestColRef = collection(database, 'requests');
 
 function Create() {
   const [requests, setRequests] = useState([]);
@@ -23,14 +23,14 @@ function Create() {
   }, []);
 
   const getRequests = async () => {
-    const q = await query(requestColRef, where("status", "==", "open"));
+    const q = await query(requestColRef, where('status', '==', 'open'));
 
     const data = await getDocs(q);
     setRequests(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
 
   return (
-    <div>
+    <div className={style.open}>
       <h1>Open Requests</h1>
       <p>
         All open requests are listed below, give back to the community by
@@ -41,7 +41,7 @@ function Create() {
         return (
           <div key={i} className={style.card}>
             <div className={style.content}>
-              <h2 className={style.text}>{request.title}</h2>
+              <h2 className={style.head}>{request.title}</h2>
               <div className={style.meta}>
                 <p className={style.text}>{request.username}</p>
                 <p className={style.text}>
@@ -60,10 +60,10 @@ function Create() {
               <p className={style.text}>{request.description}</p>
               <div className={style.cta}>
                 <a
-                  target="_blank"
+                  target='_blank'
                   className={style.link}
                   href={`./${request.id}`}
-                  rel={"noreferrer"}
+                  rel={'noreferrer'}
                 >
                   Resolve
                 </a>
@@ -71,10 +71,10 @@ function Create() {
             </div>
             <div className={style.image}>
               <Image
-                src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1073"
-                alt=""
-                height="175px"
-                width="300px"
+                src='https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1073'
+                alt=''
+                height='175px'
+                width='300px'
               />
             </div>
           </div>
