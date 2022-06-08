@@ -64,3 +64,13 @@
   width: 70%;
   margin: 0 auto;
 }
+.input {
+  width: 500px;
+  height: 40px;
+}
+.btn {
+  padding: 10px 25px;
+  background-color: black;
+  color: #fff;
+  cursor: pointer;
+}

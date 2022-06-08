@@ -1,12 +1,12 @@
-import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { database } from "../../firebaseConfig";
-import style from "../../components/ResourceCard.module.css";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { database } from '../../firebaseConfig';
+import style from '../../components/ResourceCard.module.css';
+import { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../../context/AuthContext';
 
-const requestColRef = collection(database, "requests");
+const requestColRef = collection(database, 'requests');
 
 function Request() {
   const router = useRouter();
@@ -39,12 +39,12 @@ function Request() {
 
     const requestDocRef = doc(requestColRef, request_id);
     await updateDoc(requestDocRef, {
-      status: "closed",
+      status: 'closed',
       closedOn: new Date(),
     });
 
     const { title, description, category, displayCategory, topic } = request;
-    const resourceColRef = collection(database, "resources");
+    const resourceColRef = collection(database, 'resources');
     await addDoc(resourceColRef, {
       title,
       description,
@@ -59,7 +59,7 @@ function Request() {
   };
 
   return (
-    <div>
+    <div className={style.open}>
       <div>
         <h1>Resolve request by: {request.username}</h1>
         <div className={style.card}>
@@ -82,10 +82,10 @@ function Request() {
           </div>
           <div className={style.image}>
             <Image
-              src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1073"
-              alt=""
-              height="175px"
-              width="300px"
+              src='https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1073'
+              alt=''
+              height='175px'
+              width='300px'
             />
           </div>
         </div>
@@ -93,10 +93,18 @@ function Request() {
 
       <form>
         <label>Resource Link</label>
-        <input type="text" name="link" onChange={handleChange}></input>
-        <button type="submit" onClick={resolveRequest}>
-          submit response
-        </button>
+        <br />
+        <input
+          className={style.input}
+          type='text'
+          name='link'
+          onChange={handleChange}
+        ></input>
+        <br />
+        <br />
+        <a className={style.link} type='submit' onClick={resolveRequest}>
+          Submit Response
+        </a>
       </form>
     </div>
   );
